@@ -1,21 +1,29 @@
-# Build APK dari GitHub tanpa laptop: tab Actions -> "EAS Build" -> Run workflow.
-# Butuh 1 secret repo: EXPO_TOKEN. Variabel EXPO_PUBLIC_* diisi di expo.dev (Project > Environment variables),
-# karena build berjalan di server EAS, bukan di GitHub. Build PERTAMA harus interaktif (buat keystore), lihat PANDUAN_PUBLISH.md.
-name: EAS Build
+name: EAS Build & Update
 
 on:
   workflow_dispatch:
     inputs:
-      profile:
-        description: Profil build (preview = APK uji, production = rilis)
+      action:
+        description: Pilih aksi (update = OTA cepat, build = APK/AAB baru)
+        default: update
+        type: choice
+        options:
+          - update
+          - build
+      target:
+        description: Profil build atau branch update (preview atau production)
         default: preview
         type: choice
         options:
           - preview
           - production
+      message:
+        description: Pesan update (dipakai saat action = update)
+        default: Update aplikasi CodBer
+        type: string
 
 jobs:
-  build:
+  run:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -35,7 +43,14 @@ jobs:
       - name: Install EAS CLI
         run: npm install -g eas-cli
 
-      - name: Run EAS Build (Android)
+      - name: Run EAS Update (OTA)
+        if: github.event.inputs.action == 'update'
         env:
           EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
-        run: eas build --platform android --profile ${{ github.event.inputs.profile || 'preview' }} --non-interactive --no-wait
+        run: eas update --branch ${{ github.event.inputs.target }} --message "${{ github.event.inputs.message }}" --non-interactive
+
+      - name: Run EAS Build (Android)
+        if: github.event.inputs.action == 'build'
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas build --platform android --profile ${{ github.event.inputs.target }} --non-interactive --no-wait
