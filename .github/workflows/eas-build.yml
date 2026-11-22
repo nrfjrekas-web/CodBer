@@ -2,6 +2,7 @@
 # Butuh 1 secret repo: EXPO_TOKEN. Variabel EXPO_PUBLIC_* diisi di expo.dev (Project > Environment variables),
 # karena build berjalan di server EAS, bukan di GitHub. Build PERTAMA harus interaktif (buat keystore), lihat PANDUAN_PUBLISH.md.
 name: EAS Build
+
 on:
   workflow_dispatch:
     inputs:
@@ -9,17 +10,32 @@ on:
         description: Profil build (preview = APK uji, production = rilis)
         default: preview
         type: choice
-        options: [preview, production]
+        options:
+          - preview
+          - production
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with: { node-version: 20 }
-      - uses: expo/expo-github-action@v8
-        with: { eas-version: latest, token: '${{ secrets.EXPO_TOKEN }}' }
-      - run: npm install
-      - run: npx expo install --fix
-      - run: eas build --platform android --profile ${{ github.event.inputs.profile }} --non-interactive --no-wait
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm ci || npm install
+
+      - name: Fix Expo package versions
+        run: npx expo install --fix
+
+      - name: Install EAS CLI
+        run: npm install -g eas-cli
+
+      - name: Run EAS Build (Android)
+        env:
+          EXPO_TOKEN: ${{ secrets.EXPO_TOKEN }}
+        run: eas build --platform android --profile ${{ github.event.inputs.profile || 'preview' }} --non-interactive --no-wait
