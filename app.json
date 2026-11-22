@@ -1,0 +1,28 @@
+{
+  "expo": {
+    "name": "CodBer",
+    "slug": "codber",
+    "scheme": "codber",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": { "image": "./assets/splash.png", "resizeMode": "contain", "backgroundColor": "#FFFFFF" },
+    "android": {
+      "package": "id.codber.app",
+      "adaptiveIcon": { "foregroundImage": "./assets/adaptive-icon.png", "backgroundColor": "#FFFFFF" },
+      "permissions": ["ACCESS_COARSE_LOCATION", "ACCESS_FINE_LOCATION", "POST_NOTIFICATIONS"],
+      "config": { "googleMaps": { "apiKey": "GANTI_DENGAN_GOOGLE_MAPS_ANDROID_KEY" } }
+    },
+    "plugins": [
+      "expo-router",
+      "expo-secure-store",
+      ["expo-location", { "locationWhenInUsePermission": "CodBer memakai lokasi untuk menandai alamat pengantaran dan, bagi driver, hanya saat mengantar pesanan aktif." }],
+      ["expo-image-picker", { "photosPermission": "CodBer memerlukan akses foto untuk mengunggah foto produk, toko, dan dokumen pendaftaran." }],
+      ["expo-notifications", { "color": "#1B7F14" }]
+    ],
+    "extra": { "eas": { "projectId": "" } },
+    "experiments": { "typedRoutes": false }
+  }
+}
