@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { Stack, router, useSegments } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
 import * as Notifications from 'expo-notifications';
+import * as Updates from 'expo-updates';
 import { StatusBar } from 'expo-status-bar';
 import { useAuth } from '@/stores/auth';
 import { useCart } from '@/stores/cart';
@@ -17,6 +18,23 @@ export default function RootLayout() {
 
   useEffect(() => { init(); hydrate(); }, [init, hydrate]);
   useEffect(() => { if (ready) SplashScreen.hideAsync(); }, [ready]);
+
+  // Cek & pasang update OTA otomatis saat aplikasi dibuka agar langsung berubah tanpa download ulang APK/AAB.
+  useEffect(() => {
+    async function syncOtaUpdate() {
+      if (__DEV__) return;
+      try {
+        const update = await Updates.checkForUpdateAsync();
+        if (update.isAvailable) {
+          await Updates.fetchUpdateAsync();
+          await Updates.reloadAsync();
+        }
+      } catch {
+        // Lewati jika sedang offline atau server update belum memiliki rilis baru
+      }
+    }
+    syncOtaUpdate();
+  }, []);
 
   // Penjaga navigasi: belum login -> OTP; belum punya nama -> lengkapi profil; selesai -> beranda sesuai mode.
   useEffect(() => {
