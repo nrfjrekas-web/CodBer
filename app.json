@@ -2,6 +2,7 @@
   "expo": {
     "name": "CodBer",
     "slug": "codber",
+    "owner": "jagodigital",
     "scheme": "codber",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -22,7 +23,11 @@
       ["expo-image-picker", { "photosPermission": "CodBer memerlukan akses foto untuk mengunggah foto produk, toko, dan dokumen pendaftaran." }],
       ["expo-notifications", { "color": "#1B7F14" }]
     ],
-    "extra": { "eas": { "projectId": "" } },
+    "extra": {
+      "eas": {
+        "projectId": "19902ba4-b322-4ddf-9276-627edf74ad51"
+      }
+    },
     "experiments": { "typedRoutes": false }
   }
 }
