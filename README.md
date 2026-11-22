@@ -1,4 +1,4 @@
-# CodBer · Delivery Jember
+# CodBer · Delivery 
 
 Aplikasi Android (Expo + React Native + TypeScript) dengan backend Supabase. Satu aplikasi, empat role: Customer, Driver, Merchant, Admin. Dibangun dari `PRD_CodBer.md` v1.0.
 
