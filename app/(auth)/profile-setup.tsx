@@ -1,14 +1,13 @@
 import React, { useState } from 'react';
 import { ScrollView, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { supabase } from '@/lib/supabase';
 import { useAuth } from '@/stores/auth';
 import { Button, Field, OfflineBanner } from '@/components/ui';
 import { colors, font, space } from '@/constants/theme';
 import { friendlyError } from '@/utils/format';
 
 export default function ProfileSetup() {
-  const { session, load, signOut } = useAuth();
+  const { completeProfileName, signOut } = useAuth();
   const [name, setName] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -16,11 +15,15 @@ export default function ProfileSetup() {
   const save = async () => {
     const full = name.trim();
     if (full.length < 3) return setError('Tulis nama lengkap minimal 3 huruf.');
-    setLoading(true); setError(null);
-    const { error: e } = await supabase.from('profiles').update({ full_name: full }).eq('id', (session?.user.id ?? ''));
-    if (e) { setLoading(false); return setError(friendlyError(e)); }
-    await load();
-    setLoading(false);
+    setLoading(true);
+    setError(null);
+    try {
+      await completeProfileName(full);
+    } catch (e) {
+      setError(friendlyError(e));
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (

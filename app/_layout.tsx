@@ -36,7 +36,7 @@ export default function RootLayout() {
     syncOtaUpdate();
   }, []);
 
-  // Penjaga navigasi: belum login -> OTP; belum punya nama -> lengkapi profil; selesai -> beranda sesuai mode.
+  // Penjaga navigasi: belum daftar/masuk -> layar daftar/masuk tanpa OTP; belum punya nama -> lengkapi profil; selesai -> beranda sesuai mode.
   useEffect(() => {
     if (!ready) return;
     const inAuth = segments[0] === '(auth)';
