@@ -23,6 +23,12 @@
       ["expo-image-picker", { "photosPermission": "CodBer memerlukan akses foto untuk mengunggah foto produk, toko, dan dokumen pendaftaran." }],
       ["expo-notifications", { "color": "#1B7F14" }]
     ],
+    "runtimeVersion": {
+      "policy": "sdkVersion"
+    },
+    "updates": {
+      "url": "https://u.expo.dev/19902ba4-b322-4ddf-9276-627edf74ad51"
+    },
     "extra": {
       "eas": {
         "projectId": "19902ba4-b322-4ddf-9276-627edf74ad51"
